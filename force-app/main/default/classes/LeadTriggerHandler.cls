@@ -7,11 +7,6 @@ public with sharing class LeadTriggerHandler {
     public static final String CAMPAIGN_DEFAULT_STATUS = 'Planned';
     public static final String CAMPAIGN_MEMBER_DEFAULT_STATUS = 'Sent';
 
-    /**
-     * Main entry point to process newly inserted Leads.
-     * Filters for Foobar leads, groups them by sales rep, finds or creates an appropriate campaign,
-     * and associates each lead with its campaign via CampaignMember records.
-     */
     public static void processFoobarLeads(List<Lead> newLeads) { // handleAfterInsert
         // Step 1: Filter leads injected by Foobar.
         List<Lead> foobarLeads = LeadHelper.filterLeadsBySource(newLeads, FOOBAR_LEAD_SOURCE);

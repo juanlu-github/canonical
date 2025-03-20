@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Lead_Source__c</fullName>
+    <description>Leads from this source will be added to this type of Campaign as Campaign Members.</description>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <label>Lead Source</label>
+    <required>false</required>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Foobar</fullName>
+                <default>true</default>
+                <label>Foobar</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>
