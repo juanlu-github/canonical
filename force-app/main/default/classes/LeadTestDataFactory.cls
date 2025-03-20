@@ -25,6 +25,11 @@ public class LeadTestDataFactory {
         return this;
     }
 
+    public LeadTestDataFactory withLeadSource(String leadSource) {
+        record.LeadSource = leadSource;
+        return this;
+    }
+
     public Lead build() {
         Lead builtRecord = record.clone(false, false, false, false);
         resetRecord();  // Reset the record to ensure a fresh record for each build, i.e., to prevent carry-over values in fields between builds
