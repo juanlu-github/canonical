@@ -5,6 +5,8 @@
     <columns>DeveloperName</columns>
     <columns>Lead_Source__c</columns>
     <columns>Campaign_Name_Prefix__c</columns>
+    <columns>Campaign_Name_Delimiter__c</columns>
+    <columns>Time_Format__c</columns>
     <columns>Time_Interval_in_Minutes__c</columns>
     <columns>Campaign_Defaul_Status__c</columns>
     <columns>Campaign_Member_Default_Status__c</columns>

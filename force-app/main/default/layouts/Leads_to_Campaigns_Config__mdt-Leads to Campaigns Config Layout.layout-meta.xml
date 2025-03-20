@@ -24,7 +24,11 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Time_Interval_in_Minutes__c</field>
+                <field>Campaign_Name_Delimiter__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Time_Format__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -35,6 +39,10 @@
             <layoutItems>
                 <behavior>Required</behavior>
                 <field>NamespacePrefix</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Time_Interval_in_Minutes__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
