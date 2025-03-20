@@ -1,5 +1,7 @@
 public with sharing class LeadTriggerHandler {
 
+    public static final String LEAD_TRIGGER_NAME = 'LeadTrigger';
+
     public static void handler(
                             Boolean isBefore,
                             Boolean isAfter,
@@ -11,7 +13,7 @@ public with sharing class LeadTriggerHandler {
                             List<Lead> oldList,
                             Map<Id, Lead> oldMap) {
         // Check whether the trigger is enabled or bypassed
-        Trigger_Configuration__mdt triggerConfig = TriggerConfigHelper.getTriggerConfig('LeadTrigger');
+        Trigger_Configuration__mdt triggerConfig = TriggerConfigHelper.getTriggerConfig(LeadTriggerHandler.LEAD_TRIGGER_NAME);
         if (!TriggerConfigHelper.isTriggerEnabled(triggerConfig) 
             || TriggerConfigHelper.shouldBypassTrigger(triggerConfig)) {
             return;

@@ -12,7 +12,11 @@ private class CampaignHelperTest {
         User currentUser = [SELECT Id, Name FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1];
         DateTime currentTime = System.now();
         Leads_to_Campaigns_Config__mdt config = LeadsToCampaignsConfigHelper.getConfig(LeadsToCampaignsConfigHelper.CMT_RECORD_NAME_FOOBAR);
-        String campaignName = LeadsToCampaignsConfigHelper.getCampaignNamePrefix(config) + currentUser.Name + ' - ' + currentTime.format('yyyyMMddHHmmss');
+        String campaignName = LeadsToCampaignsConfigHelper.getCampaignNamePrefix(config)
+                                 + LeadsToCampaignsConfigHelper.getCampaignNameDelimiter(config)
+                                 + currentUser.Name
+                                 + LeadsToCampaignsConfigHelper.getCampaignNameDelimiter(config)
+                                 + currentTime.format(LeadsToCampaignsConfigHelper.getTimeFormat(config));
         Campaign newCampaign = new Campaign(
             Name = campaignName,
             Status = LeadsToCampaignsConfigHelper.getCampaignDefaultStatus(config)
@@ -54,7 +58,11 @@ private class CampaignHelperTest {
         String repName = 'Jane Doe';
         DateTime currentTime = System.now();
         Leads_to_Campaigns_Config__mdt config = LeadsToCampaignsConfigHelper.getConfig(LeadsToCampaignsConfigHelper.CMT_RECORD_NAME_FOOBAR);
-        String campaignName = LeadsToCampaignsConfigHelper.getCampaignNamePrefix(config) + repName + ' - ' + currentTime.format('yyyyMMddHHmmss');
+        String campaignName = LeadsToCampaignsConfigHelper.getCampaignNamePrefix(config)
+                                + LeadsToCampaignsConfigHelper.getCampaignNameDelimiter(config)
+                                + repName
+                                + LeadsToCampaignsConfigHelper.getCampaignNameDelimiter(config)
+                                + currentTime.format(LeadsToCampaignsConfigHelper.getTimeFormat(config));
 
         // Pre-check
         List<Campaign> campaignsBeforeProcessing = [SELECT Id FROM Campaign WHERE Name = :campaignName];

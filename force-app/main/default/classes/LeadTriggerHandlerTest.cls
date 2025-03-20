@@ -28,7 +28,11 @@ private class LeadTriggerHandlerTest {
         insert leads;
 
         User currentUser = [SELECT Id, Name FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1];
-        String campaignNamePattern = LeadsToCampaignsConfigHelper.getCampaignNamePrefix(config) + currentUser.Name + ' - %';
+        String campaignNamePattern = LeadsToCampaignsConfigHelper.getCampaignNamePrefix(config)
+                                        + LeadsToCampaignsConfigHelper.getCampaignNameDelimiter(config)
+                                        + currentUser.Name
+                                        + LeadsToCampaignsConfigHelper.getCampaignNameDelimiter(config)
+                                        + '%';
 
         // Act
         Test.startTest();
@@ -48,7 +52,11 @@ private class LeadTriggerHandlerTest {
         User currentUser = [SELECT Id, Name FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1];
         Leads_to_Campaigns_Config__mdt config = LeadsToCampaignsConfigHelper.getConfig(LeadsToCampaignsConfigHelper.CMT_RECORD_NAME_FOOBAR);
         DateTime currentTime = System.now();
-        String campaignName = LeadsToCampaignsConfigHelper.getCampaignNamePrefix(config) + currentUser.Name + ' - ' + currentTime.format('yyyyMMddHHmmss');
+        String campaignName = LeadsToCampaignsConfigHelper.getCampaignNamePrefix(config)
+                                 + LeadsToCampaignsConfigHelper.getCampaignNameDelimiter(config)
+                                 + currentUser.Name
+                                 + LeadsToCampaignsConfigHelper.getCampaignNameDelimiter(config)
+                                 + currentTime.format(LeadsToCampaignsConfigHelper.getTimeFormat(config));
         Campaign existingCampaign = new Campaign(
             Name = campaignName,
             Status = LeadsToCampaignsConfigHelper.getCampaignDefaultStatus(config)
@@ -82,7 +90,11 @@ private class LeadTriggerHandlerTest {
 
         User currentUser = [SELECT Id, Name FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1];
         Leads_to_Campaigns_Config__mdt config = LeadsToCampaignsConfigHelper.getConfig(LeadsToCampaignsConfigHelper.CMT_RECORD_NAME_FOOBAR);
-        String campaignNamePattern = LeadsToCampaignsConfigHelper.getCampaignNamePrefix(config) + currentUser.Name + ' - %';
+        String campaignNamePattern = LeadsToCampaignsConfigHelper.getCampaignNamePrefix(config)
+                                        + LeadsToCampaignsConfigHelper.getCampaignNameDelimiter(config)
+                                        + currentUser.Name
+                                        + LeadsToCampaignsConfigHelper.getCampaignNameDelimiter(config)
+                                        + '%';
 
         // Act
         Test.startTest();

@@ -9,7 +9,11 @@ private class LeadTriggerTest {
         // Arrange
         User currentUser = [SELECT Id, Name FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1];
         Leads_to_Campaigns_Config__mdt config = LeadsToCampaignsConfigHelper.getConfig(LeadsToCampaignsConfigHelper.CMT_RECORD_NAME_FOOBAR);
-        String campaignNamePattern = LeadsToCampaignsConfigHelper.getCampaignNamePrefix(config) + currentUser.Name + ' - %';
+        String campaignNamePattern = LeadsToCampaignsConfigHelper.getCampaignNamePrefix(config)
+                                        + LeadsToCampaignsConfigHelper.getCampaignNameDelimiter(config)
+                                        + currentUser.Name
+                                        + LeadsToCampaignsConfigHelper.getCampaignNameDelimiter(config)
+                                        + '%';
         List<Lead> leads = new LeadTestDataFactory().withLeadSource(LeadsToCampaignsConfigHelper.getLeadSource(config)).build(3);
 
         // Act

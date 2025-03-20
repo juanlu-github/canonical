@@ -2,7 +2,7 @@ public with sharing class LeadHelper {
     
     public static void processFoobarLeads(List<Lead> newLeads) {
         // Step 1: Filter leads injected by Foobar.
-        List<Lead> foobarLeads = LeadHelper.filterLeadsBySource(newLeads, LeadsToCampaignsConfigHelper.getLeadSource(LeadsToCampaignsConfigHelper.getConfig('Foobar')));
+        List<Lead> foobarLeads = LeadHelper.filterLeadsBySource(newLeads, LeadsToCampaignsConfigHelper.getLeadSource(LeadsToCampaignsConfigHelper.getConfig(LeadsToCampaignsConfigHelper.CMT_RECORD_NAME_FOOBAR)));
         if (foobarLeads.isEmpty()) {
             return;
         }

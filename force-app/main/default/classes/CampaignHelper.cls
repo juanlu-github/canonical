@@ -11,7 +11,12 @@ public with sharing class CampaignHelper {
 
     public static Campaign getRecentCampaign(User user, DateTime currentTime) {
         Leads_to_Campaigns_Config__mdt config = LeadsToCampaignsConfigHelper.getConfig(LeadsToCampaignsConfigHelper.CMT_RECORD_NAME_FOOBAR);
-        String campaignNamePattern = LeadsToCampaignsConfigHelper.getCampaignNamePrefix(config) + user.Name + ' - %';
+        String campaignNamePattern = LeadsToCampaignsConfigHelper.getCampaignNamePrefix(config)
+                                        + LeadsToCampaignsConfigHelper.getCampaignNameDelimiter(config)
+                                        + user.Name
+                                        + LeadsToCampaignsConfigHelper.getCampaignNameDelimiter(config)
+                                        + '%';
+
         DateTime cutoffTime = currentTime.addMinutes(-(Integer)LeadsToCampaignsConfigHelper.getTimeIntervalInMinutes(config));
         List<Campaign> recentCampaigns = [
             SELECT Id, Name, CreatedDate
@@ -28,7 +33,11 @@ public with sharing class CampaignHelper {
 
     public static Campaign insertNewCampaign(String repName, DateTime currentTime) {
         Leads_to_Campaigns_Config__mdt config = LeadsToCampaignsConfigHelper.getConfig(LeadsToCampaignsConfigHelper.CMT_RECORD_NAME_FOOBAR);
-        String campaignName = LeadsToCampaignsConfigHelper.getCampaignNamePrefix(config) + repName + ' - ' + currentTime.format('yyyyMMddHHmmss');
+        String campaignName = LeadsToCampaignsConfigHelper.getCampaignNamePrefix(config)
+                                 + LeadsToCampaignsConfigHelper.getCampaignNameDelimiter(config)
+                                 + repName
+                                 + LeadsToCampaignsConfigHelper.getCampaignNameDelimiter(config)
+                                 + currentTime.format(LeadsToCampaignsConfigHelper.getTimeFormat(config));
         Campaign newCampaign = new Campaign(
             Name = campaignName,
             Status = LeadsToCampaignsConfigHelper.getCampaignDefaultStatus(config)

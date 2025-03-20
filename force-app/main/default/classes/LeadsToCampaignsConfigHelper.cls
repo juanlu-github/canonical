@@ -6,7 +6,7 @@ public with sharing class LeadsToCampaignsConfigHelper {
         Leads_to_Campaigns_Config__mdt config;
         try {
             config = [
-                SELECT DeveloperName, Lead_Source__c, Campaign_Name_Prefix__c, Time_Interval_in_Minutes__c, Campaign_Defaul_Status__c, Campaign_Member_Default_Status__c
+                SELECT DeveloperName, Lead_Source__c, Campaign_Name_Prefix__c, Campaign_Name_Delimiter__c, Time_Format__c, Time_Interval_in_Minutes__c, Campaign_Defaul_Status__c, Campaign_Member_Default_Status__c
                 FROM Leads_to_Campaigns_Config__mdt
                 WHERE DeveloperName = :cmtRecordName
                 LIMIT 1
@@ -32,6 +32,14 @@ public with sharing class LeadsToCampaignsConfigHelper {
 
     public static String getCampaignNamePrefix(Leads_to_Campaigns_Config__mdt config) {
         return config?.Campaign_Name_Prefix__c ?? '';
+    }
+
+    public static String getCampaignNameDelimiter(Leads_to_Campaigns_Config__mdt config) {
+        return config?.Campaign_Name_Delimiter__c ?? '';
+    }
+
+    public static String getTimeFormat(Leads_to_Campaigns_Config__mdt config) {
+        return config?.Time_Format__c ?? '';
     }
 
     public static String getCampaignDefaultStatus(Leads_to_Campaigns_Config__mdt config) {

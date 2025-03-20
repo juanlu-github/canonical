@@ -34,107 +34,48 @@ public class LeadsToCampaignsConfigHelperTest {
     }
 
     @isTest
-    static void testGetTimeIntervalInMinutes() {
+    static void testGetFullCmt() {
         // Arrange
         String cmtRecordName = 'Foobar';
-        Integer timeIntervalInMinutes = 5;
+        Integer timeIntervalInMinutes = 1;
+        String leadSource = 'MyleadSource';
+        String campaignNamePrefix = 'MycampaignNamePrefix';
+        String campaignNameDelimiter = '#';
+        String timeFormat = 'HHmmss yyyyMMdd';
+        String campaignDefaultStatus = 'In Progress';
+        String campaignMemberDefaultStatus = 'Received';
+
         Leads_to_Campaigns_Config__mdt newConfig = new LeadsToCampaignsConfigTestDataFactory()
                                                     .withDeveloperName(cmtRecordName)
                                                     .withTimeIntervalInMinutes(timeIntervalInMinutes)
-                                                    .build();
-
-        // Act
-        Test.startTest();
-        Integer retrievedTimeIntervalInMinutes = (Integer)LeadsToCampaignsConfigHelper.getTimeIntervalInMinutes(newConfig);
-        Test.stopTest();
-
-        // Assert
-        Assert.areEqual(cmtRecordName, newConfig.DeveloperName, 'DeveloperName should match the input.');
-        Assert.areEqual(retrievedTimeIntervalInMinutes, newConfig.Time_Interval_in_Minutes__c, 'Time_Interval_in_Minutes__c should match the input.');
-        Assert.areEqual(retrievedTimeIntervalInMinutes, timeIntervalInMinutes, 'Time_Interval_in_Minutes__c should match the input.');
-    }
-
-    @isTest
-    static void testGetLeadSource() {
-        // Arrange
-        String cmtRecordName = 'Foobar';
-        String leadSource = 'Foobar';
-        Leads_to_Campaigns_Config__mdt newConfig = new LeadsToCampaignsConfigTestDataFactory()
-                                                    .withDeveloperName(cmtRecordName)
                                                     .withLeadSource(leadSource)
-                                                    .build();
-
-        // Act
-        Test.startTest();
-        String retrievedLeadSource = LeadsToCampaignsConfigHelper.getLeadSource(newConfig);
-        Test.stopTest();
-
-        // Assert
-        Assert.areEqual(cmtRecordName, newConfig.DeveloperName, 'DeveloperName should match the input.');
-        Assert.areEqual(retrievedLeadSource, newConfig.Lead_Source__c, 'Lead_Source__c should match the input.');
-        Assert.areEqual(retrievedLeadSource, leadSource, 'Lead_Source__c should match the input.');
-    }
-
-    @isTest
-    static void testGetCampaignNamePrefix() {
-        // Arrange
-        String cmtRecordName = 'Foobar';
-        String campaignNamePrefix = 'Foobar -';
-        Leads_to_Campaigns_Config__mdt newConfig = new LeadsToCampaignsConfigTestDataFactory()
-                                                    .withDeveloperName(cmtRecordName)
                                                     .withCampaignNamePrefix(campaignNamePrefix)
-                                                    .build();
-
-        // Act
-        Test.startTest();
-        String retrievedCampaignNamePrefix = LeadsToCampaignsConfigHelper.getCampaignNamePrefix(newConfig);
-        Test.stopTest();
-
-        // Assert
-        Assert.areEqual(cmtRecordName, newConfig.DeveloperName, 'DeveloperName should match the input.');
-        Assert.areEqual(retrievedCampaignNamePrefix, newConfig.Campaign_Name_Prefix__c, 'Campaign_Name_Prefix__c should match the input.');
-        Assert.areEqual(retrievedCampaignNamePrefix, campaignNamePrefix, 'Campaign_Name_Prefix__c should match the input.');
-    }
-
-    @isTest
-    static void testGetCampaignDefaultStatus() {
-        // Arrange
-        String cmtRecordName = 'Foobar';
-        String campaignDefaultStatus = 'Planned';
-        Leads_to_Campaigns_Config__mdt newConfig = new LeadsToCampaignsConfigTestDataFactory()
-                                                    .withDeveloperName(cmtRecordName)
+                                                    .withCampaignNameDelimiter(campaignNameDelimiter)
+                                                    .withTimeFormat(timeFormat)
                                                     .withCampaignDefaultStatus(campaignDefaultStatus)
-                                                    .build();
-
-        // Act
-        Test.startTest();
-        String retrievedCampaignDefaultStatus = LeadsToCampaignsConfigHelper.getCampaignDefaultStatus(newConfig);
-        Test.stopTest();
-
-        // Assert
-        Assert.areEqual(cmtRecordName, newConfig.DeveloperName, 'DeveloperName should match the input.');
-        Assert.areEqual(retrievedCampaignDefaultStatus, newConfig.Campaign_Defaul_Status__c, 'Campaign_Defaul_Status__c should match the input.');
-        Assert.areEqual(retrievedCampaignDefaultStatus, campaignDefaultStatus, 'Campaign_Defaul_Status__c should match the input.');
-    }
-
-    @isTest
-    static void testGetCampaignMemberDefaultStatus() {
-        // Arrange
-        String cmtRecordName = 'Foobar';
-        String campaignMemberDefaultStatus = 'Foobar -';
-        Leads_to_Campaigns_Config__mdt newConfig = new LeadsToCampaignsConfigTestDataFactory()
-                                                    .withDeveloperName(cmtRecordName)
                                                     .withCampaignMemberDefaultStatus(campaignMemberDefaultStatus)
                                                     .build();
 
         // Act
         Test.startTest();
+        Leads_to_Campaigns_Config__mdt retrievedConfig = LeadsToCampaignsConfigHelper.getConfig(cmtRecordName);
+        Integer retrievedTimeIntervalInMinutes = (Integer)LeadsToCampaignsConfigHelper.getTimeIntervalInMinutes(newConfig);
+        String retrievedLeadSource = LeadsToCampaignsConfigHelper.getLeadSource(newConfig);
+        String retrievedCampaignNamePrefix = LeadsToCampaignsConfigHelper.getCampaignNamePrefix(newConfig);
+        String retrievedCampaignNameDelimiter = LeadsToCampaignsConfigHelper.getCampaignNameDelimiter(newConfig);
+        String retrievedTimeFormat = LeadsToCampaignsConfigHelper.getTimeFormat(newConfig);
+        String retrievedCampaignDefaultStatus = LeadsToCampaignsConfigHelper.getCampaignDefaultStatus(newConfig);
         String retrievedCampaignMemberDefaultStatus = LeadsToCampaignsConfigHelper.getCampaignMemberDefaultStatus(newConfig);
         Test.stopTest();
 
         // Assert
         Assert.areEqual(cmtRecordName, newConfig.DeveloperName, 'DeveloperName should match the input.');
-        Assert.areEqual(retrievedCampaignMemberDefaultStatus, newConfig.Campaign_Member_Default_Status__c, 'Campaign_Member_Default_Status__c should match the input.');
-        Assert.areEqual(retrievedCampaignMemberDefaultStatus, campaignMemberDefaultStatus, 'Campaign_Member_Default_Status__c should match the input.');
+        Assert.areEqual(timeIntervalInMinutes, retrievedTimeIntervalInMinutes, 'retrievedTimeIntervalInMinutes should match the input.');
+        Assert.areEqual(leadSource, retrievedLeadSource, 'retrievedLeadSource should match the input.');
+        Assert.areEqual(campaignNamePrefix, retrievedCampaignNamePrefix, 'retrievedCampaignNamePrefix should match the input.');
+        Assert.areEqual(campaignNameDelimiter, retrievedCampaignNameDelimiter, 'retrievedCampaignNameDelimiter should match the input.');
+        Assert.areEqual(timeFormat, retrievedTimeFormat, 'retrievedTimeFormat should match the input.');
+        Assert.areEqual(campaignDefaultStatus, retrievedCampaignDefaultStatus, 'retrievedCampaignDefaultStatus should match the input.');
+        Assert.areEqual(campaignMemberDefaultStatus, retrievedCampaignMemberDefaultStatus, 'retrievedCampaignMemberDefaultStatus should match the input.');
     }
 }

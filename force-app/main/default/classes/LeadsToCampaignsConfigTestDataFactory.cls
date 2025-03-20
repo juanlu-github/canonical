@@ -24,7 +24,7 @@ public class LeadsToCampaignsConfigTestDataFactory {
         return this;
     }
 
-    public LeadsToCampaignsConfigTestDataFactory withTimeIntervalInMinutes(Double timeIntervalInMinutes) {
+    public LeadsToCampaignsConfigTestDataFactory withTimeIntervalInMinutes(Integer timeIntervalInMinutes) {
         record.Time_Interval_in_Minutes__c = timeIntervalInMinutes;
         return this;
     }
@@ -36,6 +36,16 @@ public class LeadsToCampaignsConfigTestDataFactory {
 
     public LeadsToCampaignsConfigTestDataFactory withCampaignNamePrefix(String campaignNamePrefix) {
         record.Campaign_Name_Prefix__c = campaignNamePrefix;
+        return this;
+    }
+
+    public LeadsToCampaignsConfigTestDataFactory withCampaignNameDelimiter(String campaignNameDelimiter) {
+        record.Campaign_Name_Delimiter__c = campaignNameDelimiter;
+        return this;
+    }
+
+    public LeadsToCampaignsConfigTestDataFactory withTimeFormat(String timeFormat) {
+        record.Time_Format__c = timeFormat;
         return this;
     }
 
