@@ -12,7 +12,9 @@ private class LeadTestDataFactoryTest {
         LeadTestDataFactory factory = new LeadTestDataFactory();
 
         // Act
+        Test.startTest();
         Lead record = factory.build();
+        Test.stopTest();
 
         // Assert
         Assert.areEqual(defaultLastName, record.LastName, 'LastName is: "' + record?.LastName ?? '' + '", and should be: "' + defaultLastName + '"');
@@ -29,11 +31,13 @@ private class LeadTestDataFactoryTest {
         LeadTestDataFactory factory = new LeadTestDataFactory();
 
         // Act
+        Test.startTest();
         Lead record = factory
                             .withLastName(lastName)
                             .withCompany(company)
                             .withLeadSource(leadSource)
                             .build();
+        Test.stopTest();
 
         // Assert
         Assert.areEqual(lastName, record.LastName, 'LastName is: "' + record?.LastName ?? '' + '", and should be: "' + lastName + '"');
@@ -50,7 +54,9 @@ private class LeadTestDataFactoryTest {
         LeadTestDataFactory factory = new LeadTestDataFactory();
 
         // Act
+        Test.startTest();
         List<Lead> records = factory.build(numberOfRecords);
+        Test.stopTest();
 
         // Assert
         Assert.areEqual(numberOfRecords, records.size(), 'The number of created records should match the input value');
@@ -74,6 +80,7 @@ private class LeadTestDataFactoryTest {
     
         // Act
         // Create two records with different values
+        Test.startTest();
         Lead record1 = factory
                             .withLastName(lastName1)
                             .withCompany(company1)
@@ -84,7 +91,8 @@ private class LeadTestDataFactoryTest {
                             .withCompany(company2)
                             .withLeadSource(leadSource2)
                             .build();
-    
+        Test.stopTest();
+
         // Assert
         // Verify that the records have different values and are separate instances
         Assert.areEqual(lastName1, record1.LastName, 'LastName is: "' + record1?.LastName ?? '' + '", and should be: "' + lastName1 + '"');
@@ -111,6 +119,7 @@ private class LeadTestDataFactoryTest {
 
         // Act
         // Create the first record with specific values
+        Test.startTest();
         Lead record1 = factory
                             .withLastName(lastName1)
                             .withCompany(company1)
@@ -121,6 +130,7 @@ private class LeadTestDataFactoryTest {
                             .withLastName(lastName2)
                             .withCompany(company2)
                             .build();
+        Test.stopTest();
 
         // Assert
         Assert.areEqual(leadSource1, record1.LeadSource, 'LeadSource is: "' + record1?.LeadSource ?? '' + '", and should be: "' + company1 + '"');
