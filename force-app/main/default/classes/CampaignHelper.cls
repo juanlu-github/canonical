@@ -10,8 +10,9 @@ public with sharing class CampaignHelper {
     }
 
     public static Campaign getRecentCampaign(User user, DateTime currentTime) {
-        String campaignNamePattern = LeadTriggerHandler.CAMPAIGN_NAME_PREFIX + user.Name + ' - %';
-        DateTime cutoffTime = currentTime.addMinutes(-LeadTriggerHandler.FOOBAR_WINDOW_MINUTES);
+        Leads_to_Campaigns_Config__mdt config = LeadsToCampaignsConfigHelper.getConfig(LeadsToCampaignsConfigHelper.CMT_RECORD_NAME_FOOBAR);
+        String campaignNamePattern = LeadsToCampaignsConfigHelper.getCampaignNamePrefix(config) + user.Name + ' - %';
+        DateTime cutoffTime = currentTime.addMinutes(-(Integer)LeadsToCampaignsConfigHelper.getTimeIntervalInMinutes(config));
         List<Campaign> recentCampaigns = [
             SELECT Id, Name, CreatedDate
             FROM Campaign
@@ -26,10 +27,11 @@ public with sharing class CampaignHelper {
     }
 
     public static Campaign insertNewCampaign(String repName, DateTime currentTime) {
-        String campaignName = LeadTriggerHandler.CAMPAIGN_NAME_PREFIX + repName + ' - ' + currentTime.format('yyyyMMddHHmmss');
+        Leads_to_Campaigns_Config__mdt config = LeadsToCampaignsConfigHelper.getConfig(LeadsToCampaignsConfigHelper.CMT_RECORD_NAME_FOOBAR);
+        String campaignName = LeadsToCampaignsConfigHelper.getCampaignNamePrefix(config) + repName + ' - ' + currentTime.format('yyyyMMddHHmmss');
         Campaign newCampaign = new Campaign(
             Name = campaignName,
-            Status = LeadTriggerHandler.CAMPAIGN_DEFAULT_STATUS
+            Status = LeadsToCampaignsConfigHelper.getCampaignDefaultStatus(config)
         );
         try {
             insert newCampaign;
@@ -46,12 +48,13 @@ public with sharing class CampaignHelper {
     // so that the field is indexed.
 
     public static void createCampaignMembers(List<Lead> leads, Campaign campaign) {
+        Leads_to_Campaigns_Config__mdt config = LeadsToCampaignsConfigHelper.getConfig(LeadsToCampaignsConfigHelper.CMT_RECORD_NAME_FOOBAR);
         List<CampaignMember> campaignMembers = new List<CampaignMember>();
         for (Lead lead : leads) {
             campaignMembers.add(new CampaignMember(
                 CampaignId = campaign.Id,
                 LeadId = lead.Id,
-                Status = LeadTriggerHandler.CAMPAIGN_MEMBER_DEFAULT_STATUS
+                Status = LeadsToCampaignsConfigHelper.getCampaignMemberDefaultStatus(config)
             ));
         }
         if (!campaignMembers.isEmpty()) {

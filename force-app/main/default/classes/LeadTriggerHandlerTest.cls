@@ -23,15 +23,16 @@ private class LeadTriggerHandlerTest {
     @isTest
     static void testProcessFoobarLeadsNoPreviousCampaignPositive() {
         // Arrange
-        List<Lead> leads = new LeadTestDataFactory().withLeadSource(LeadTriggerHandler.FOOBAR_LEAD_SOURCE).build(3);
+        Leads_to_Campaigns_Config__mdt config = LeadsToCampaignsConfigHelper.getConfig(LeadsToCampaignsConfigHelper.CMT_RECORD_NAME_FOOBAR);
+        List<Lead> leads = new LeadTestDataFactory().withLeadSource(LeadsToCampaignsConfigHelper.getLeadSource(config)).build(3);
         insert leads;
 
         User currentUser = [SELECT Id, Name FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1];
-        String campaignNamePattern = LeadTriggerHandler.CAMPAIGN_NAME_PREFIX + currentUser.Name + ' - %';
+        String campaignNamePattern = LeadsToCampaignsConfigHelper.getCampaignNamePrefix(config) + currentUser.Name + ' - %';
 
         // Act
         Test.startTest();
-        LeadTriggerHandler.processFoobarLeads(leads);
+        LeadHelper.processFoobarLeads(leads);
         Test.stopTest();
 
         // Assert
@@ -45,17 +46,18 @@ private class LeadTriggerHandlerTest {
     static void testProcessFoobarLeadsExistingCampaignPositive() {
         // Arrange
         User currentUser = [SELECT Id, Name FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1];
+        Leads_to_Campaigns_Config__mdt config = LeadsToCampaignsConfigHelper.getConfig(LeadsToCampaignsConfigHelper.CMT_RECORD_NAME_FOOBAR);
         DateTime currentTime = System.now();
-        String campaignName = LeadTriggerHandler.CAMPAIGN_NAME_PREFIX + currentUser.Name + ' - ' + currentTime.format('yyyyMMddHHmmss');
+        String campaignName = LeadsToCampaignsConfigHelper.getCampaignNamePrefix(config) + currentUser.Name + ' - ' + currentTime.format('yyyyMMddHHmmss');
         Campaign existingCampaign = new Campaign(
             Name = campaignName,
-            Status = LeadTriggerHandler.CAMPAIGN_DEFAULT_STATUS
+            Status = LeadsToCampaignsConfigHelper.getCampaignDefaultStatus(config)
         );
         System.runAs(currentUser) {
             insert existingCampaign;
         }
 
-        List<Lead> leads = new LeadTestDataFactory().withLeadSource(LeadTriggerHandler.FOOBAR_LEAD_SOURCE).build(2);
+        List<Lead> leads = new LeadTestDataFactory().withLeadSource(LeadsToCampaignsConfigHelper.getLeadSource(config)).build(2);
         insert leads;
 
         // Pre-check
@@ -64,7 +66,7 @@ private class LeadTriggerHandlerTest {
 
         // Act
         Test.startTest();
-        LeadTriggerHandler.processFoobarLeads(leads);
+        LeadHelper.processFoobarLeads(leads);
         Test.stopTest();
         
         // Assert
@@ -79,11 +81,12 @@ private class LeadTriggerHandlerTest {
         insert leads;
 
         User currentUser = [SELECT Id, Name FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1];
-        String campaignNamePattern = LeadTriggerHandler.CAMPAIGN_NAME_PREFIX + currentUser.Name + ' - %';
+        Leads_to_Campaigns_Config__mdt config = LeadsToCampaignsConfigHelper.getConfig(LeadsToCampaignsConfigHelper.CMT_RECORD_NAME_FOOBAR);
+        String campaignNamePattern = LeadsToCampaignsConfigHelper.getCampaignNamePrefix(config) + currentUser.Name + ' - %';
 
         // Act
         Test.startTest();
-        LeadTriggerHandler.processFoobarLeads(leads);
+        LeadHelper.processFoobarLeads(leads);
         Test.stopTest();
 
         // Assert

@@ -11,10 +11,11 @@ private class CampaignHelperTest {
         // Arrange
         User currentUser = [SELECT Id, Name FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1];
         DateTime currentTime = System.now();
-        String campaignName = LeadTriggerHandler.CAMPAIGN_NAME_PREFIX + currentUser.Name + ' - ' + currentTime.format('yyyyMMddHHmmss');
+        Leads_to_Campaigns_Config__mdt config = LeadsToCampaignsConfigHelper.getConfig(LeadsToCampaignsConfigHelper.CMT_RECORD_NAME_FOOBAR);
+        String campaignName = LeadsToCampaignsConfigHelper.getCampaignNamePrefix(config) + currentUser.Name + ' - ' + currentTime.format('yyyyMMddHHmmss');
         Campaign newCampaign = new Campaign(
             Name = campaignName,
-            Status = LeadTriggerHandler.CAMPAIGN_DEFAULT_STATUS
+            Status = LeadsToCampaignsConfigHelper.getCampaignDefaultStatus(config)
         );
         System.runAs(currentUser) {
             insert newCampaign;
@@ -52,7 +53,8 @@ private class CampaignHelperTest {
         // Arrange
         String repName = 'Jane Doe';
         DateTime currentTime = System.now();
-        String campaignName = LeadTriggerHandler.CAMPAIGN_NAME_PREFIX + repName + ' - ' + currentTime.format('yyyyMMddHHmmss');
+        Leads_to_Campaigns_Config__mdt config = LeadsToCampaignsConfigHelper.getConfig(LeadsToCampaignsConfigHelper.CMT_RECORD_NAME_FOOBAR);
+        String campaignName = LeadsToCampaignsConfigHelper.getCampaignNamePrefix(config) + repName + ' - ' + currentTime.format('yyyyMMddHHmmss');
 
         // Pre-check
         List<Campaign> campaignsBeforeProcessing = [SELECT Id FROM Campaign WHERE Name = :campaignName];
@@ -98,13 +100,14 @@ private class CampaignHelperTest {
     @isTest
     static void testCreateCampaignMembersPositive() {
         // Arrange
+        Leads_to_Campaigns_Config__mdt config = LeadsToCampaignsConfigHelper.getConfig(LeadsToCampaignsConfigHelper.CMT_RECORD_NAME_FOOBAR);
         Campaign campaign = new Campaign(
-            Name = LeadTriggerHandler.CAMPAIGN_NAME_PREFIX + 'TestUser - ' + System.now().format('yyyyMMddHHmmss'),
-            Status = LeadTriggerHandler.CAMPAIGN_DEFAULT_STATUS
+            Name = LeadsToCampaignsConfigHelper.getCampaignNamePrefix(config) + 'TestUser - ' + System.now().format('yyyyMMddHHmmss'),
+            Status = LeadsToCampaignsConfigHelper.getCampaignDefaultStatus(config)
         );
         insert campaign;
 
-        List<Lead> leads = new LeadTestDataFactory().withLeadSource(LeadTriggerHandler.FOOBAR_LEAD_SOURCE).build(3);
+        List<Lead> leads = new LeadTestDataFactory().withLeadSource(LeadsToCampaignsConfigHelper.getLeadSource(config)).build(3);
         insert leads;
 
         // Act
@@ -120,9 +123,10 @@ private class CampaignHelperTest {
     @isTest
     static void testCreateCampaignMembersNegative() {
         // Arrange
+        Leads_to_Campaigns_Config__mdt config = LeadsToCampaignsConfigHelper.getConfig(LeadsToCampaignsConfigHelper.CMT_RECORD_NAME_FOOBAR);
         Campaign campaign = new Campaign(
-            Name = LeadTriggerHandler.CAMPAIGN_NAME_PREFIX + 'TestUser - ' + System.now().format('yyyyMMddHHmmss'),
-            Status = LeadTriggerHandler.CAMPAIGN_DEFAULT_STATUS
+            Name = LeadsToCampaignsConfigHelper.getCampaignNamePrefix(config) + 'TestUser - ' + System.now().format('yyyyMMddHHmmss'),
+            Status = LeadsToCampaignsConfigHelper.getCampaignDefaultStatus(config)
         );
         insert campaign;
 

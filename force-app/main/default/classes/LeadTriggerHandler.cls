@@ -1,27 +1,47 @@
 public with sharing class LeadTriggerHandler {
 
-    // This constant values should be created in a CMT or a Custom Setting.
-    public static final String FOOBAR_LEAD_SOURCE = 'Foobar';
-    public static final Integer FOOBAR_WINDOW_MINUTES = 15;
-    public static final String CAMPAIGN_NAME_PREFIX = 'Foobar - ';
-    public static final String CAMPAIGN_DEFAULT_STATUS = 'Planned';
-    public static final String CAMPAIGN_MEMBER_DEFAULT_STATUS = 'Sent';
-
-    public static void processFoobarLeads(List<Lead> newLeads) { // handleAfterInsert
-        // Step 1: Filter leads injected by Foobar.
-        List<Lead> foobarLeads = LeadHelper.filterLeadsBySource(newLeads, FOOBAR_LEAD_SOURCE);
-        if (foobarLeads.isEmpty()) {
+    public static void handler(
+                            Boolean isBefore,
+                            Boolean isAfter,
+                            Boolean isDelete,
+                            Boolean isInsert,
+                            Boolean isUpdate,
+                            List<Lead> newList,
+                            Map<Id, Lead> newMap,
+                            List<Lead> oldList,
+                            Map<Id, Lead> oldMap) {
+        // Check whether the trigger is enabled or bypassed
+        Trigger_Configuration__mdt triggerConfig = TriggerConfigHelper.getTriggerConfig('LeadTrigger');
+        if (!TriggerConfigHelper.isTriggerEnabled(triggerConfig) 
+            || TriggerConfigHelper.shouldBypassTrigger(triggerConfig)) {
             return;
         }
-
-        // Step 2: Retrieve the user performing the insertion.
-        User currentUser = [SELECT Id, Name FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1];
-
-        // Step 3: Find or create a campaign for the inserting user.
-        DateTime currentTime = System.now();
-        Campaign userCampaign = CampaignHelper.findOrCreateCampaign(currentUser, currentTime);
-
-        // Step 4: Create CampaignMember records to associate leads with the campaign.
-        CampaignHelper.createCampaignMembers(foobarLeads, userCampaign);
+        //if (Trigger.isBefore) {
+            //if (Trigger.isInsert) LeadTriggerHandler.handleBeforeInsert(oldList, newList, oldMap, newMap);
+            //if (Trigger.isUpdate) LeadTriggerHandler.handleBeforeUpdate(oldList, newList, oldMap, newMap);
+            //if (Trigger.isDelete) LeadTriggerHandler.handleBeforeDelete(oldList, newList, oldMap, newMap);
+        /*} else*/ if (Trigger.isAfter) {
+            if (Trigger.isInsert) LeadTriggerHandler.handleAfterInsert(oldList, newList, oldMap, newMap);
+            //if (Trigger.isUpdate) LeadTriggerHandler.handleAfterUpdate(oldList, newList, oldMap, newMap);
+            //if (Trigger.isDelete) LeadTriggerHandler.handleAfterDelete(oldList, newList, oldMap, newMap);
+            //if (Trigger.isDelete) LeadTriggerHandler.handleAfterUndelete(oldList, newList, oldMap, newMap);
+        }
     }
-}
+
+    //public static void handleBeforeInsert(List<Lead> oldList, List<Lead> newList, Map<Id, Lead> oldMap, Map<Id, Lead> newMap) {}
+    
+    //public static void handleBeforeUpdate(List<Lead> oldList, List<Lead> newList, Map<Id, Lead> oldMap, Map<Id, Lead> newMap) {}
+    
+    //public static void handleBeforeDelete(List<Lead> oldList, List<Lead> newList, Map<Id, Lead> oldMap, Map<Id, Lead> newMap) {}
+    
+    public static void handleAfterInsert(List<Lead> oldList, List<Lead> newList, Map<Id, Lead> oldMap, Map<Id, Lead> newMap) {
+        LeadHelper.processFoobarLeads(newList);
+    }
+    
+    //public static void handleAfterUpdate(List<Lead> oldList, List<Lead> newList, Map<Id, Lead> oldMap, Map<Id, Lead> newMap) {}
+    
+    //public static void handleAfterDelete(List<Lead> oldList, List<Lead> newList, Map<Id, Lead> oldMap, Map<Id, Lead> newMap) {}
+    
+    //public static void handleAfterUndelete(List<Lead> oldList, List<Lead> newList, Map<Id, Lead> oldMap, Map<Id, Lead> newMap) {}
+}// POTENTIAL IMPROVEMENT: use an Apex trigger framework (there are dozens to choose from).
+// This allows for better code reusing, disabling triggers declaratively, bypassing the trigger for a given user, etc.

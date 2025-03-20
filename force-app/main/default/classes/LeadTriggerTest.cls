@@ -8,8 +8,9 @@ private class LeadTriggerTest {
     static void testLeadTrigger() {
         // Arrange
         User currentUser = [SELECT Id, Name FROM User WHERE Id = :UserInfo.getUserId() LIMIT 1];
-        String campaignNamePattern = LeadTriggerHandler.CAMPAIGN_NAME_PREFIX + currentUser.Name + ' - %';
-        List<Lead> leads = new LeadTestDataFactory().withLeadSource(LeadTriggerHandler.FOOBAR_LEAD_SOURCE).build(3);
+        Leads_to_Campaigns_Config__mdt config = LeadsToCampaignsConfigHelper.getConfig(LeadsToCampaignsConfigHelper.CMT_RECORD_NAME_FOOBAR);
+        String campaignNamePattern = LeadsToCampaignsConfigHelper.getCampaignNamePrefix(config) + currentUser.Name + ' - %';
+        List<Lead> leads = new LeadTestDataFactory().withLeadSource(LeadsToCampaignsConfigHelper.getLeadSource(config)).build(3);
 
         // Act
         Test.startTest();
